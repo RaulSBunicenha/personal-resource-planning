@@ -3,25 +3,26 @@ const { Sequelize, DataTypes } = require('sequelize')
 const port = process.env.PORT || 3000
 
 function createDatabase () {
-  const database = new Sequelize({
+  const dbConfig = {
     dialect: 'postgres',
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    database: process.env.DB_NAME,
-    username: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
+    host: process.env.DB_HOST.toString(),
+    port: Number(process.env.DB_PORT),
+    database: process.env.DB_NAME.toString(),
+    username: process.env.DB_USERNAME.toString(),
+    password: process.env.DB_PASSWORD.toString(),
     logging: false,
     define: {
-      underscored: true,
+      underscored: true
     }
-  })
+  }
+
+  const database = new Sequelize(dbConfig)
 
   return database
 }
 
 async function tryConnection (database) {
-  await database.authenticate()
-  return true
+  return database.authenticate()
 }
 
 async function defineUserModel (database) {
@@ -40,19 +41,20 @@ async function defineUserModel (database) {
   return User
 }
 
-async function addUser (User, ...{ firstName, lastName }) {
+async function addUser (User, firstName, lastName) {
   const user = User.build({ firstName, lastName })
   await user.save()
   return user
 }
 
 async function listUser (User) {
-  return User.find()
+  return User.findAll()
 }
 
 createServer(async (req, res) => {
   try {
     const database = createDatabase()
+    await tryConnection(database)
     const User = await defineUserModel(database)
     await addUser(User, 'Raul', 'Bunicenha')
     await addUser(User, 'Renata', 'Longhi')
