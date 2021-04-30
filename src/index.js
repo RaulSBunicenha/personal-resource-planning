@@ -1,6 +1,11 @@
 const { createServer } = require('http')
+const { resolve: pathResolve } = require('path')
+const dotenv = require('dotenv')
 const { Sequelize, DataTypes } = require('sequelize')
 const port = process.env.PORT || 3000
+
+const dotEnvPath = process.env.DOTENV_PATH || pathResolve(process.cwd(), '.env')
+dotenv.config({ path: dotEnvPath })
 
 function createDatabase () {
   const dbConfig = {
@@ -58,7 +63,7 @@ createServer(async (req, res) => {
     const User = await defineUserModel(database)
     // await addUser(User, 'Raul', 'Bunicenha')
     // await addUser(User, 'Renata', 'Longhi')
-    await addUser(User, 'João', 'Bragiola')
+    // await addUser(User, 'João', 'Bragiola')
 
     const userList = await listUser(User)
 
