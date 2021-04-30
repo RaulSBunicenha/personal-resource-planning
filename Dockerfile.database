@@ -1,0 +1,8 @@
+FROM postgres:9.6-alpine
+
+ARG USER_ID
+ARG GROUP_ID
+
+RUN addgroup --gid $GROUP_ID user
+RUN adduser -D -g '' -u $USER_ID -G user user
+USER user

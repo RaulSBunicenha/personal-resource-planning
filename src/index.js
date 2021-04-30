@@ -36,7 +36,7 @@ async function defineUserModel (database) {
     }
   })
 
-  await User.sync({ force: true })
+  // await User.sync({ force: true })
 
   return User
 }
@@ -56,8 +56,9 @@ createServer(async (req, res) => {
     const database = createDatabase()
     await tryConnection(database)
     const User = await defineUserModel(database)
-    await addUser(User, 'Raul', 'Bunicenha')
-    await addUser(User, 'Renata', 'Longhi')
+    // await addUser(User, 'Raul', 'Bunicenha')
+    // await addUser(User, 'Renata', 'Longhi')
+    await addUser(User, 'João', 'Bragiola')
 
     const userList = await listUser(User)
 
